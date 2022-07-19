@@ -24,6 +24,9 @@ class WP_Search_By_Slug
      */
     protected wpdb $wpdb;
 
+    /**
+     * @var string $prefix
+     */
     protected string $prefix = 'slug:';
 
     public function __construct()
@@ -98,7 +101,7 @@ class WP_Search_By_Slug
 
         if (empty($terms) && isset($query->query_vars['search_terms'])) {
             $terms = array_filter($query->query_vars['search_terms'], function ($term) {
-                return preg_match('/^(slug:)/', $term);
+                return preg_match("/^($this->prefix)/", $term);
             });
         }
 
@@ -108,7 +111,7 @@ class WP_Search_By_Slug
     /**
      * Walk on array for terms.
      *
-     * Returns the terms which contain the "slug:" text and able to be processed.
+     * Returns the terms which contain the "$this->prefix" text and able to be processed.
      *
      * @param WP_Query $query
      * @param Closure $closure
